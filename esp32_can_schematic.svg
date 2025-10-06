@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <style>
+    .box { fill:#f7f7f9; stroke:#111; stroke-width:2; rx:8; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#111; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size:18px; font-weight:700; }
+    .pin { font-family: monospace; font-size:12px; fill:#222; }
+    .note { font-family: Arial; font-size:12px; fill:#333; }
+    .wire { stroke:#111; stroke-width:2; fill:none; }
+    .canbus { stroke:#b30000; stroke-width:4; }
+    .term { stroke:#000; stroke-width:2; fill:#fff; }
+  </style>
+
+  <!-- Title -->
+  <text x="20" y="30" class="title">ESP32 — CAN Transceiver — OLED (SH1106) Schematic (simple)</text>
+
+  <!-- ESP32 box -->
+  <rect x="40" y="60" width="260" height="220" class="box"/>
+  <text x="60" y="90" class="label">ESP32 (Dev Module)</text>
+  <text x="60" y="120" class="pin">3V3 - VCC (3.3V)</text>
+  <text x="60" y="140" class="pin">GND - GND</text>
+  <text x="60" y="160" class="pin">GPIO21 - SDA (I2C)</text>
+  <text x="60" y="180" class="pin">GPIO22 - SCL (I2C)</text>
+  <text x="60" y="200" class="pin">GPIO5  - CAN_TX (TWAI TX)</text>
+  <text x="60" y="220" class="pin">GPIO4  - CAN_RX (TWAI RX)</text>
+
+  <!-- CAN Transceiver box -->
+  <rect x="420" y="60" width="260" height="220" class="box"/>
+  <text x="440" y="90" class="label">CAN Transceiver (e.g. SN65HVD230 / TJA1050)</text>
+  <text x="440" y="120" class="pin">VCC - 3.3V</text>
+  <text x="440" y="140" class="pin">GND - GND</text>
+  <text x="440" y="160" class="pin">TXD</text>
+  <text x="440" y="180" class="pin">RXD</text>
+  <text x="440" y="200" class="pin">CANH - to CAN bus</text>
+  <text x="440" y="220" class="pin">CANL - to CAN bus</text>
+
+  <!-- OLED box -->
+  <rect x="40" y="320" width="260" height="150" class="box"/>
+  <text x="60" y="350" class="label">OLED SH1106 128x64 (I2C)</text>
+  <text x="60" y="380" class="pin">VCC - 3.3V</text>
+  <text x="60" y="400" class="pin">GND - GND</text>
+  <text x="60" y="420" class="pin">SDA - connect to GPIO21</text>
+  <text x="60" y="440" class="pin">SCL - connect to GPIO22</text>
+
+  <!-- ECU / Vehicle CAN bus -->
+  <rect x="820" y="60" width="320" height="140" class="box"/>
+  <text x="840" y="90" class="label">Vehicle ECU / CAN Bus</text>
+  <text x="840" y="120" class="pin">CANH (to transceiver CANH)</text>
+  <text x="840" y="140" class="pin">CANL (to transceiver CANL)</text>
+
+  <!-- Wires: ESP32 to Transceiver -->
+  <path d="M300 180 L420 170" class="wire" />
+  <text x="310" y="165" class="note">GPIO5 → TXD</text>
+  <path d="M300 200 L420 190" class="wire" />
+  <text x="310" y="195" class="note">GPIO4 ← RXD</text>
+
+  <!-- Power wires -->
+  <path d="M140 120 L420 120" class="wire"/>
+  <text x="250" y="110" class="note">3.3V (shared)</text>
+  <path d="M140 140 L420 140" class="wire"/>
+  <text x="250" y="155" class="note">GND (common)</text>
+
+  <!-- I2C wires ESP32 to OLED -->
+  <path d="M200 160 L200 320" class="wire"/>
+  <path d="M200 160 L140 320" class="wire"/>
+  <text x="210" y="250" class="note">SDA / SCL (I2C) to OLED via GPIO21/22</text>
+
+  <!-- Transceiver to CAN bus (CANH/CANL) -->
+  <path d="M680 180 L820 120" class="canbus" />
+  <text x="700" y="135" class="note">CANH</text>
+  <path d="M680 200 L820 140" class="canbus" />
+  <text x="700" y="155" class="note">CANL</text>
+
+  <!-- Termination resistor (suggested) -->
+  <line x1="940" y1="120" x2="940" y2="140" class="term"/>
+  <text x="950" y="130" class="note">120Ω termination (at ends of bus)</text>
+
+  <!-- Notes -->
+  <text x="420" y="310" class="note">Notes:</text>
+  <text x="440" y="330" class="note">• Use 3.3V-compatible transceiver (SN65HVD230 recommended).</text>
+  <text x="440" y="350" class="note">• Ensure common GND between ESP32, transceiver, and vehicle ground.</text>
+  <text x="440" y="370" class="note">• Add 120Ω termination resistor across CANH/CANL at physical ends of the bus.</text>
+  <text x="440" y="390" class="note">• If using TJA1050, check VIO/VCC voltage (some modules expect 5V tolerant signals).</text>
+  <text x="440" y="410" class="note">• Use TWAI driver pins configured in code (CAN_TX_PIN = GPIO5, CAN_RX_PIN = GPIO4).</text>
+
+</svg>
